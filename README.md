@@ -6,6 +6,23 @@ A simple tool that watches HTTP traffic on a specific port. It shows you what re
 
 I made this tool to help debug Cloudflare Tunnels by inspecting the HTTP traffic going through them.
 
+## Installation
+
+Download the latest release for your platform from the [releases page](https://github.com/yourusername/cloudflare-inspector/releases).
+
+### macOS Intel (x86_64)
+
+```bash
+curl -L https://github.com/yourusername/cloudflare-inspector/releases/latest/download/cloudflare-inspector-darwin-amd64 -o cloudflare-inspector
+chmod +x cloudflare-inspector
+```
+
+### macOS Apple Silicon (ARM64)
+
+````bash
+curl -L https://github.com/yourusername/cloudflare-inspector/releases/latest/download/cloudflare-inspector-darwin-arm64 -o cloudflare-inspector
+chmod +x cloudflare-inspector
+
 ## Usage
 
 ```bash
@@ -17,7 +34,7 @@ sudo ./cloudflare-inspector -port 9000
 
 # See help
 ./cloudflare-inspector -h
-```
+````
 
 ## Example Request/Response
 
@@ -63,10 +80,11 @@ sudo ./cloudflare-inspector -port 9000
 
 ## Options
 
-| Flag  | Default | Description                  |
-| ----- | ------- | ---------------------------- |
-| -port | 8080    | Port to monitor HTTP traffic |
-| -h    |         | Show help                    |
+| Flag     | Default | Description                  |
+| -------- | ------- | ---------------------------- |
+| -port    | 8080    | Port to monitor HTTP traffic |
+| -version |         | Show version information     |
+| -h       |         | Show help                    |
 
 ## Why SUDO?
 

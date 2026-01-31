@@ -131,7 +131,7 @@ func (h *httpStream) logRequest(req *http.Request, bodyBytes []byte) {
 			continue
 		}
 
-		fmt.Printf("├─ %s: %s\n", key, values)
+		fmt.Printf("├─ %s: %s\n", key, strings.Join(values, ", "))
 	}
 
 	fmt.Printf("├─ Body Preview: \n")
@@ -162,7 +162,7 @@ func (h *httpStream) logResponse(resp *http.Response, bodyBytes []byte) {
 			continue
 		}
 
-		fmt.Printf("├─ %s: %s\n", key, values)
+		fmt.Printf("├─ %s: %s\n", key, strings.Join(values, ", "))
 	}
 
 	fmt.Printf("├─ Body Preview: \n")

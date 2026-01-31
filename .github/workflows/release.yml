@@ -1,0 +1,53 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.21"
+
+      - name: Install dependencies
+        run: |
+          brew install libpcap
+
+      - name: Build binary
+        run: |
+          CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build \
+            -ldflags="-X main.version=${{ github.ref_name }} -X main.commit=${{ github.sha }} -X main.date=$(date -u '+%Y-%m-%d %H:%M:%S UTC')" \
+            -o cloudflare-inspector-darwin-amd64 .
+
+      - name: Build ARM64 binary
+        run: |
+          CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build \
+            -ldflags="-X main.version=${{ github.ref_name }} -X main.commit=${{ github.sha }} -X main.date=$(date -u '+%Y-%m-%d %H:%M:%S UTC')" \
+            -o cloudflare-inspector-darwin-arm64 .
+
+      - name: Upload AMD64 binary to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./cloudflare-inspector-darwin-amd64
+          asset_name: cloudflare-inspector-darwin-amd64
+          asset_content_type: application/octet-stream
+
+      - name: Upload ARM64 binary to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./cloudflare-inspector-darwin-arm64
+          asset_name: cloudflare-inspector-darwin-arm64
+          asset_content_type: application/octet-stream
