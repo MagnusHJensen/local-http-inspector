@@ -82,11 +82,12 @@ sudo ./local-http-inspector -port 9000
 
 ## Options
 
-| Flag     | Default | Description                  |
-| -------- | ------- | ---------------------------- |
-| -port    | 8080    | Port to monitor HTTP traffic |
-| -version |         | Show version information     |
-| -h       |         | Show help                    |
+| Flag       | Default | Description                  |
+| ---------- | ------- | ---------------------------- |
+| -port      | 8080    | Port to monitor HTTP traffic |
+| -version   |         | Show version information     |
+| -dashboard | 4040    | Port for web dashboard       |
+| -h         |         | Show help                    |
 
 ## Why SUDO?
 
