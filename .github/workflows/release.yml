@@ -27,17 +27,17 @@ jobs:
         run: |
           CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build \
             -ldflags="-X main.version=${{ github.ref_name }} -X main.commit=${{ github.sha }} -X main.date=$(date -u '+%Y-%m-%dT%H:%M:%SZ')" \
-            -o cloudflare-inspector-darwin-amd64 .
+            -o local-http-inspector-darwin-amd64 .
 
       - name: Build ARM64 binary
         run: |
           CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build \
             -ldflags="-X main.version=${{ github.ref_name }} -X main.commit=${{ github.sha }} -X main.date=$(date -u '+%Y-%m-%dT%H:%M:%SZ')" \
-            -o cloudflare-inspector-darwin-arm64 .
+            -o local-http-inspector-darwin-arm64 .
 
       - name: Upload Release Assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ github.ref_name}}" ./cloudflare-inspector-darwin-amd64 ./cloudflare-inspector-darwin-arm64 --clobber
+          gh release upload "${{ github.ref_name}}" ./local-http-inspector-darwin-amd64 ./local-http-inspector-darwin-arm64 --clobber

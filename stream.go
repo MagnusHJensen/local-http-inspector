@@ -111,7 +111,8 @@ func (h *httpStream) isHTTPResponse(line string) bool {
 }
 
 func (h *httpStream) logRequest(req *http.Request, bodyBytes []byte) {
-	timestamp := time.Now().Format("2006-01-02 15:04:05")
+	now := time.Now()
+	timestamp := now.Format("2006-01-02 15:04:05")
 
 	fmt.Printf("┌─ HTTP REQUEST [%s]\n", timestamp)
 	fmt.Printf("├─ Method: %s\n", req.Method)
@@ -142,10 +143,35 @@ func (h *httpStream) logRequest(req *http.Request, bodyBytes []byte) {
 
 	fmt.Printf("└─ Protocol: %s\n", req.Proto)
 	fmt.Println()
+
+	// Store packet for web dashboard
+	headers := make(map[string]string)
+	for key, values := range req.Header {
+		headers[key] = strings.Join(values, ", ")
+	}
+
+	// PairKey uses client:port-server:port to correlate request/response
+	pairKey := fmt.Sprintf("%s:%s-%s:%s", h.net.Src(), h.transport.Src(), h.net.Dst(), h.transport.Dst())
+
+	Store.Add(CapturedPacket{
+		Type:        PacketRequest,
+		Timestamp:   now,
+		Method:      req.Method,
+		URL:         req.URL.String(),
+		Host:        req.Host,
+		ContentType: req.Header.Get("Content-Type"),
+		BodySize:    len(bodyBytes),
+		Body:        string(bodyBytes),
+		Headers:     headers,
+		Protocol:    req.Proto,
+		Connection:  fmt.Sprintf("%s:%s → %s:%s", h.net.Src(), h.transport.Src(), h.net.Dst(), h.transport.Dst()),
+		PairKey:     pairKey,
+	})
 }
 
 func (h *httpStream) logResponse(resp *http.Response, bodyBytes []byte) {
-	timestamp := time.Now().Format("2006-01-02 15:04:05")
+	now := time.Now()
+	timestamp := now.Format("2006-01-02 15:04:05")
 
 	fmt.Printf("┌─ HTTP RESPONSE [%s]\n", timestamp)
 	fmt.Printf("├─ Status: %s\n", resp.Status)
@@ -173,4 +199,27 @@ func (h *httpStream) logResponse(resp *http.Response, bodyBytes []byte) {
 
 	fmt.Printf("└─ Protocol: %s\n", resp.Proto)
 	fmt.Println()
+
+	// Store packet for web dashboard
+	headers := make(map[string]string)
+	for key, values := range resp.Header {
+		headers[key] = strings.Join(values, ", ")
+	}
+
+	// PairKey uses client:port-server:port to correlate request/response (same as request)
+	pairKey := fmt.Sprintf("%s:%s-%s:%s", h.net.Dst(), h.transport.Dst(), h.net.Src(), h.transport.Src())
+
+	Store.Add(CapturedPacket{
+		Type:        PacketResponse,
+		Timestamp:   now,
+		Status:      resp.Status,
+		StatusCode:  resp.StatusCode,
+		ContentType: resp.Header.Get("Content-Type"),
+		BodySize:    len(bodyBytes),
+		Body:        string(bodyBytes),
+		Headers:     headers,
+		Protocol:    resp.Proto,
+		Connection:  fmt.Sprintf("%s:%s ← %s:%s", h.net.Dst(), h.transport.Dst(), h.net.Src(), h.transport.Src()),
+		PairKey:     pairKey,
+	})
 }

@@ -1,4 +1,4 @@
-module github.com/magnushjensen/cloudflare-inspector
+module github.com/magnushjensen/local-http-inspector
 
 go 1.25.4
 

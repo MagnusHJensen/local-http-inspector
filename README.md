@@ -1,4 +1,4 @@
-# Cloudflare Inspector
+# Local HTTP Inspector
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
@@ -8,36 +8,37 @@ I made this tool to help debug Cloudflare Tunnels by inspecting the HTTP traffic
 
 ## Installation
 
-Download the latest release for your platform from the [releases page](https://github.com/magnushjensen/cloudflare-inspector/releases).
+Download the latest release for your platform from the [releases page](https://github.com/magnushjensen/local-http-inspector/releases).
 
 ### macOS Intel (x86_64)
 
 ```bash
-curl -L https://github.com/magnushjensen/cloudflare-inspector/releases/latest/download/cloudflare-inspector-darwin-amd64 -o cloudflare-inspector
-chmod +x cloudflare-inspector
+curl -L https://github.com/magnushjensen/local-http-inspector/releases/latest/download/local-http-inspector-darwin-amd64 -o local-http-inspector
+chmod +x local-http-inspector
 ```
 
 ### macOS Apple Silicon (ARM64)
 
-```bash
-curl -L https://github.com/magnushjensen/cloudflare-inspector/releases/latest/download/cloudflare-inspector-darwin-arm64 -o cloudflare-inspector
-chmod +x cloudflare-inspector
-```
+````bash
+curl -L https://github.com/magnushjensen/local-http-inspector/releases/latest/download/local-http-inspector-darwin-arm64 -o local-http-inspector
+chmod +x local-http-inspector
 
 ## Usage
 
 ```bash
 # Monitor default port 8080
-sudo ./cloudflare-inspector
+sudo ./local-http-inspector
 
 # Monitor a different port
-sudo ./cloudflare-inspector -port 9000
+sudo ./local-http-inspector -port 9000
 
 # See help
-./cloudflare-inspector -h
+./local-http-inspector -h
 ````
 
 ## Example Request/Response
+
+![](./assets/screenshot.png)
 
 ```
 ┌─ HTTP REQUEST [2026-01-31 14:23:17]
